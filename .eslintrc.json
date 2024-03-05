@@ -29,6 +29,7 @@
     "comma-dangle": ["error", "only-multiline"],
     "react/display-name": "off",
     "react/jsx-uses-react": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "jsx-a11y/label-has-associated-control": "off"
   }
 }
