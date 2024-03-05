@@ -1,0 +1,20 @@
+{
+    "manifest_version": 3,
+    "name": "SoftPhone",
+    "version": "1.0.0",
+    "description": "Приложение для звонков",
+    "icons": {
+      "48": "icons/phone-48.png",
+      "128": "icons/phone-128.png"
+    },
+    "action": {
+        "default_popup": "index.html"
+    },
+    "permissions": [
+        "scripting"
+    ],
+    "host_permissions": [
+        "http://*/*",
+        "https://*/*"
+    ]
+  }
