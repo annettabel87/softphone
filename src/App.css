@@ -48,13 +48,28 @@
     transition: .5s;
 }
 
-input:focus~label,
-input:valid~label {
+.input:focus~label,
+.input:valid~label {
     top: -20px;
     left: 0;
     color: #03e9f4;
     font-size: 12px;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: #fff;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #fff;
+    transition: background-color 5000s ease-in-out 0s;
+    outline: none;
+    font-size: 16px;
+}
+
 
 .button {
     padding: 10px 20px;
@@ -78,4 +93,20 @@ input:valid~label {
         0 0 5px #03e9f4,
         0 0 10px #03e9f4,
         0 0 40px #03e9f4;
+}
+
+.button:active {
+    color: black;
+}
+
+.result {
+    text-align: center;
+    color: #03e7f4;
+    font-size: 16px;
+}
+
+.error {
+    text-align: center;
+    color: red;
+    font-size: 16px;
 }

@@ -1,13 +1,39 @@
 import { useState } from 'react';
+import { messageTypes, responseType } from './constants/constants';
 import './App.css';
 
 function App() {
   const [login, setLogin] = useState();
   const [password, setPassword] = useState();
   const [server, setServer] = useState();
+  const [isRegister, setIsRegister] = useState(false);
+  const [error, setError] = useState(false);
+
+  const clearForm = () => {
+    setLogin('');
+    setPassword('');
+    setServer('');
+  };
 
   const loginHandler = (e) => {
     e.preventDefault();
+    chrome.runtime.sendMessage(
+      { type: messageTypes.register, login, password, server },
+      (response) => {
+        const { type, result } = response;
+        if (type === messageTypes.register) {
+          if (result === responseType.ok) {
+            setIsRegister(true);
+            clearForm();
+          }
+          if (result === responseType.failed) {
+            setIsRegister(false);
+            setError(`Failed registration. Try again!`);
+            setTimeout(() => setError(''), 2000);
+          }
+        }
+      }
+    );
   };
 
   return (
@@ -21,7 +47,7 @@ function App() {
               name="login"
               id="login"
               value={login}
-              onChange={(e) => setLogin(e.target.value)}
+              onChange={(e) => setLogin(e.target.value.trim())}
               className="input"
               required
             />
@@ -35,7 +61,7 @@ function App() {
               name="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value.trim())}
               className="input"
               required
             />
@@ -49,7 +75,7 @@ function App() {
               name="server"
               id="server"
               value={server}
-              onChange={(e) => setServer(e.target.value)}
+              onChange={(e) => setServer(e.target.value.trim())}
               className="input"
               required
             />
@@ -62,6 +88,8 @@ function App() {
           </button>
         </form>
       </div>
+      {error && <p className="error">{error}</p>}
+      {isRegister && <p className="result">Registration success</p>}
     </div>
   );
 }

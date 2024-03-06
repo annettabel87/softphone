@@ -3,7 +3,8 @@
   "env": {
     "browser": true,
     "es2021": true,
-    "node": true
+    "node": true,
+    "webextensions": true
   },
   "extends": ["airbnb", "prettier", "plugin:prettier/recommended"],
   "overrides": [
@@ -30,6 +31,7 @@
     "react/display-name": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "jsx-a11y/label-has-associated-control": "off"
+    "jsx-a11y/label-has-associated-control": "off",
+    "import/no-extraneous-dependencies": "off"
   }
 }
