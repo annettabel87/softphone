@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-JsSIP = importScripts('jssip.js');
+importScripts('jssip.js');
 
 const socket = new JsSIP.WebSocketInterface('wss://voip.uiscom.ru');
 const configuration = {
