@@ -10,6 +10,8 @@ const configuration = {
   register: false,
 };
 
+let coolPhone;
+
 function registration(login, password, server, cb) {
   configuration.uri = `sip:${login}@${server}`;
   configuration.password = password;
@@ -17,11 +19,14 @@ function registration(login, password, server, cb) {
   configuration.register = true;
 
   JsSIP.debug.enable('JsSIP:*');
-  const coolPhone = new JsSIP.UA(configuration);
+  coolPhone = new JsSIP.UA(configuration);
   coolPhone.start();
 
   coolPhone.on('registered', function () {
     cb({ type: 'register', result: 'ok' });
+    chrome.storage.local.set({
+      register: JSON.stringify({ server, password, login, register: true }),
+    });
   });
 
   coolPhone.on('registrationFailed', function () {
@@ -33,6 +38,12 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   const { type, login, password, server } = msg;
   if (type === 'register') {
     registration(login, password, server, sendResponse);
+  }
+
+  if (type === 'call') {
+    console.log(msg.uri);
+    sendResponse({ type: 'call', result: 'ok' });
+    return true;
   }
   return true;
 });
