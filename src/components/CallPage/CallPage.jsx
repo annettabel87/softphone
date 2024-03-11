@@ -4,12 +4,14 @@ import { messageTypes, responseType, statusCallTypes } from '../../constants/con
 import AnswerButtons from './AnswerButtons/AnswerButtons';
 import CallButton from './CallButton/CallButton';
 import './CallPage.css';
+import Timer from '../Timer/Timer';
 
 function CallPage({ isConnect }) {
   const [sipURI, setURI] = useState('');
   const [error, setError] = useState(false);
   const [incomingPhone, setIncomingPhone] = useState('');
   const [statusCall, setStatusCall] = useState(statusCallTypes.default);
+  const [running, setRunning] = useState(false);
 
   const callHandler = (e) => {
     e.preventDefault();
@@ -74,6 +76,15 @@ function CallPage({ isConnect }) {
       setStatusCall('default');
       setIncomingPhone('');
     }
+
+    if (type === messageTypes.timer) {
+      if (result === responseType.stop) {
+        setRunning(false);
+      }
+      if (result === responseType.start) {
+        setRunning(true);
+      }
+    }
   });
 
   return (
@@ -109,6 +120,7 @@ function CallPage({ isConnect }) {
           statusCall={statusCall}
           isConnect={isConnect}
         />
+        {running && <Timer running={running} />}
       </form>
     </div>
   );

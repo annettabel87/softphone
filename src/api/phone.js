@@ -3,6 +3,8 @@ import { messageTypes, responseType } from '../constants/constants';
 
 let coolPhone;
 let session;
+let callStartTime;
+let callEndTime;
 const sound = new window.Audio();
 sound.autoplay = true;
 sound.loop = true;
@@ -95,9 +97,14 @@ export function registration(login, password, server) {
     });
 
     session.on('confirmed', () => {
+      callStartTime = new Date();
       chrome.runtime.sendMessage({
         type: messageTypes.answer,
         result: responseType.ok,
+      });
+      chrome.runtime.sendMessage({
+        type: messageTypes.timer,
+        result: responseType.start,
       });
 
       const localStream = session.connection.getLocalStreams()[0];
@@ -135,8 +142,13 @@ export function registration(login, password, server) {
 
     session.on('ended', () => {
       incomingSound.pause();
+      callEndTime = new Date();
       chrome.runtime.sendMessage({
         type: messageTypes.end,
+      });
+      chrome.runtime.sendMessage({
+        type: messageTypes.timer,
+        result: responseType.stop,
       });
     });
   });

@@ -5,12 +5,15 @@ export const messageTypes = {
   save: 'save',
   connect: 'connect',
   end: 'end',
+  timer: 'timer',
 };
 
 export const responseType = {
   ok: 'ok',
   failed: 'failed',
   progress: 'progress',
+  stop: 'stop',
+  start: 'start',
 };
 
 export const ROUTE = {

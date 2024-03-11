@@ -50,4 +50,16 @@ chrome.runtime.onMessage.addListener((msg) => {
     chrome.runtime.sendMessage({ type: 'end' });
     return true;
   }
+
+  if (type === 'timer') {
+    if (result === 'start') {
+      chrome.runtime.sendMessage({ type: 'timer', result: 'start' });
+      return true;
+    }
+
+    if (result === 'stop') {
+      chrome.runtime.sendMessage({ type: 'timer', result: 'stop' });
+      return true;
+    }
+  }
 });
