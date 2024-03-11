@@ -1,0 +1,36 @@
+.answerBtnBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.rejectButton,
+.answerButton {
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: .5s;
+  letter-spacing: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.rejectButton {
+  background-color: brown;
+  border: 1px solid brown;
+}
+
+.rejectButton:hover {
+  background-color: #e55050;
+}
+
+.answerButton {
+  background-color: darkcyan;
+  border: 1px solid darkcyan;
+}
+
+.answerButton:hover {
+  background-color: rgb(9, 173, 173);
+}

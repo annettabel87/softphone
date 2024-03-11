@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE, messageTypes, responseType } from '../../constants/constants';
+import { registration } from '../../api/phone';
 import './RegistrationPage.css';
 
-function RegistrationPage() {
+function RegistrationPage({ setIsRegister, isRegister }) {
   const [login, setLogin] = useState();
   const [password, setPassword] = useState();
   const [server, setServer] = useState();
-  const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState(false);
 
   const navigate = useNavigate();
@@ -17,14 +17,16 @@ function RegistrationPage() {
     setPassword('');
     setServer('');
   };
+
   useEffect(() => {
     chrome.storage.local
       .get(['register'])
       .then(({ register }) => {
         if (register) {
-          setLogin(register.login);
-          setPassword(register.password);
-          setServer(register.server);
+          const data = JSON.parse(register);
+          setLogin(data.login);
+          setPassword(data.password);
+          setServer(data.server);
         }
       })
       .catch((e) => console.log(e));
@@ -32,25 +34,24 @@ function RegistrationPage() {
 
   const loginHandler = (e) => {
     e.preventDefault();
-    chrome.runtime.sendMessage(
-      { type: messageTypes.register, login, password, server },
-      (response) => {
-        const { type, result } = response;
-        if (type === messageTypes.register) {
-          if (result === responseType.ok) {
-            setIsRegister(true);
-            clearForm();
-            setTimeout(() => navigate(ROUTE.CALL), 2000);
-          }
-          if (result === responseType.failed) {
-            setIsRegister(false);
-            setError(`Failed registration. Try again!`);
-            setTimeout(() => setError(''), 2000);
-          }
-        }
-      }
-    );
+    registration(login, password, server);
   };
+
+  chrome.runtime.onMessage.addListener((msg) => {
+    const { type, result } = msg;
+    if (type === messageTypes.register) {
+      if (result === responseType.ok) {
+        setIsRegister(true);
+        clearForm();
+        setTimeout(() => navigate(ROUTE.CALL), 2000);
+      }
+      if (result === responseType.failed) {
+        setIsRegister(false);
+        setError(`Failed registration. Try again!`);
+        setTimeout(() => setError(''), 2000);
+      }
+    }
+  });
 
   return (
     <form onSubmit={loginHandler} className="form">

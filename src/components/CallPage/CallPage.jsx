@@ -1,18 +1,83 @@
 import { useState } from 'react';
-import { messageTypes } from '../../constants/constants';
+import { answer, call, endCall } from '../../api/phone';
+import { messageTypes, responseType, statusCallTypes } from '../../constants/constants';
+import AnswerButtons from './AnswerButtons/AnswerButtons';
+import CallButton from './CallButton/CallButton';
+import './CallPage.css';
 
-function CallPage() {
+function CallPage({ isConnect }) {
   const [sipURI, setURI] = useState('');
   const [error, setError] = useState(false);
+  const [incomingPhone, setIncomingPhone] = useState('');
+  const [statusCall, setStatusCall] = useState(statusCallTypes.default);
 
   const callHandler = (e) => {
     e.preventDefault();
-    chrome.runtime.sendMessage({ type: messageTypes.call, uri: sipURI }, (response) => {
-      console.log(response);
-    });
+    setError('');
+    try {
+      if (statusCall === statusCallTypes.default) {
+        call(sipURI);
+      } else {
+        endCall();
+      }
+    } catch (er) {
+      if (er.message.includes('Invalid target:')) {
+        setError('invalid number');
+      } else {
+        setError('error');
+      }
+    }
   };
+
+  const answerHandler = (e) => {
+    e.preventDefault();
+    setError('');
+    answer();
+  };
+
+  const rejectHandler = (e) => {
+    e.preventDefault();
+    setError('');
+    endCall();
+  };
+
+  chrome.runtime.onMessage.addListener((msg) => {
+    const { type, phone, result } = msg;
+    if (type === messageTypes.answer) {
+      if (phone) {
+        setIncomingPhone(phone);
+        setStatusCall(statusCallTypes.incomingCall);
+      }
+      if (result === responseType.ok) {
+        setStatusCall(statusCallTypes.connectingAnswer);
+      }
+      if (result === responseType.failed) {
+        setError('rejected');
+        setIncomingPhone('');
+        setStatusCall(statusCallTypes.default);
+        setTimeout(() => setError(''), 2000);
+      }
+    }
+
+    if (type === messageTypes.call) {
+      if (result === responseType.ok) {
+        setStatusCall(statusCallTypes.connectingCall);
+      }
+      if (result === responseType.failed) {
+        setError('rejected');
+      }
+      if (result === responseType.progress) {
+        setStatusCall(statusCallTypes.progress);
+      }
+    }
+    if (type === messageTypes.end) {
+      setStatusCall('default');
+      setIncomingPhone('');
+    }
+  });
+
   return (
-    <div>
+    <div className="callPage">
       <form onSubmit={callHandler} className="form">
         <div className="input-box">
           <input
@@ -28,11 +93,23 @@ function CallPage() {
             URI SIP:
           </label>
         </div>
-        <button type="submit" className="button">
-          Call
-        </button>
+        {error && <p className="error">{error}</p>}
+        {incomingPhone && (
+          <p className="phoneBlock">
+            Call from: <span className="phone">{incomingPhone}</span>
+          </p>
+        )}
+        <AnswerButtons
+          answerHandler={answerHandler}
+          rejectHandler={rejectHandler}
+          statusCall={statusCall}
+        />
+        <CallButton
+          callHandler={callHandler}
+          statusCall={statusCall}
+          isConnect={isConnect}
+        />
       </form>
-      {error && <p className="error">{error}</p>}
     </div>
   );
 }

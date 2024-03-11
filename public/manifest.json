@@ -1,26 +1,30 @@
 {
-    "manifest_version": 3,
-    "name": "SoftPhone",
-    "version": "1.0.0",
-    "description": "Приложение для звонков",
-    "icons": {
-      "48": "icons/phone-48.png",
-      "128": "icons/phone-128.png"
-    },
-    "action": {
-        "default_popup": "index.html"
-    },
-    "permissions": [
-        "scripting",
-        "activeTab",
-        "storage",
-        "tabs"
-    ],
-    "host_permissions": [
-        "http://*/*",
-        "https://*/*"
-    ],
-    "background": {
-        "service_worker": "background.js"
-      }
-  }
+  "manifest_version": 3,
+  "name": "SoftPhone",
+  "version": "1.0.0",
+  "description": "Приложение для звонков",
+  "icons": {
+    "48": "icons/phone-48.png",
+    "128": "icons/phone-128.png"
+  },
+  "action": {
+    "default_popup": "index.html"
+  },
+  "permissions": ["scripting", "activeTab", "storage", "notifications"],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "js": ["jssip.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["phone.js", "jssip.js"],
+      "matches": ["http://*/*", "https://*/*"]
+    }
+  ]
+}

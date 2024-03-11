@@ -1,49 +1,53 @@
-/* eslint-disable no-undef */
-importScripts('jssip.js');
-
-const socket = new JsSIP.WebSocketInterface('wss://voip.uiscom.ru');
-const configuration = {
-  sockets: [socket],
-  uri: '',
-  password: '',
-  username: '',
-  register: false,
-};
-
-let coolPhone;
-
-function registration(login, password, server, cb) {
-  configuration.uri = `sip:${login}@${server}`;
-  configuration.password = password;
-  configuration.username = login;
-  configuration.register = true;
-
-  JsSIP.debug.enable('JsSIP:*');
-  coolPhone = new JsSIP.UA(configuration);
-  coolPhone.start();
-
-  coolPhone.on('registered', function () {
-    cb({ type: 'register', result: 'ok' });
-    chrome.storage.local.set({
-      register: JSON.stringify({ server, password, login, register: true }),
-    });
-  });
-
-  coolPhone.on('registrationFailed', function () {
-    cb({ type: 'register', result: 'failed' });
-  });
-}
-
-chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
-  const { type, login, password, server } = msg;
-  if (type === 'register') {
-    registration(login, password, server, sendResponse);
-  }
-
-  if (type === 'call') {
-    console.log(msg.uri);
-    sendResponse({ type: 'call', result: 'ok' });
+chrome.runtime.onMessage.addListener((msg) => {
+  const { type, keyName, value, result, phone } = msg;
+  if (type === 'save') {
+    chrome.storage.local.set({ [keyName]: JSON.stringify(value) });
     return true;
   }
-  return true;
+
+  if (type === 'register') {
+    if (result === 'ok') {
+      chrome.runtime.sendMessage({ type: 'register', result: 'ok' });
+      return true;
+    }
+
+    if (result === 'failed') {
+      chrome.runtime.sendMessage({ type: 'register', result: 'failed' });
+      return true;
+    }
+  }
+
+  if (type === 'answer') {
+    if (result === 'ok') {
+      chrome.runtime.sendMessage({ type: 'answer', result: 'ok' });
+      return true;
+    }
+
+    if (phone) {
+      chrome.runtime.sendMessage({ type: 'answer', phone });
+      return true;
+    }
+
+    if (result === 'failed') {
+      chrome.runtime.sendMessage({ type: 'answer', result: 'failed' });
+      return true;
+    }
+  }
+
+  if (type === 'connect') {
+    if (result === 'ok') {
+      chrome.runtime.sendMessage({ type: 'connect', result: 'ok' });
+      return true;
+    }
+
+    if (result === 'failed') {
+      chrome.runtime.sendMessage({ type: 'connect', result: 'failed' });
+      return true;
+    }
+  }
+
+  if (type === 'end') {
+    chrome.runtime.sendMessage({ type: 'end' });
+    return true;
+  }
 });

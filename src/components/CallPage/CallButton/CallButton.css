@@ -1,0 +1,43 @@
+.callButtonBlock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.rejectBtn,
+.callBtn {
+  padding: 10px;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: .5s;
+  letter-spacing: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.rejectBtn {
+  background-color: brown;
+  border: 1px solid brown;
+}
+
+.rejectBtn:hover {
+  background-color: #e55050;
+}
+
+.callBtn {
+  background-color: darkcyan;
+  border: 1px solid darkcyan;
+}
+
+.callBtn:hover {
+  background-color: rgb(9, 173, 173);
+}
+
+.callBtn:disabled,
+.callBtn[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}

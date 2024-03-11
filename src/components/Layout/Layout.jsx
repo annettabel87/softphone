@@ -1,10 +1,12 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import Connect from '../Connect/Connect';
 import './Layout.css';
 
-function LayoutComponent() {
+function LayoutComponent({ setIsConnect, isConnect }) {
   return (
     <div className="body">
       <header className="header">
+        <Connect setIsConnect={setIsConnect} isConnect={isConnect} />
         <nav className="navigation">
           <NavLink to="/">Registration</NavLink>
           <NavLink to="/call">Call</NavLink>
