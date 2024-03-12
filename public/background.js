@@ -78,5 +78,12 @@ chrome.runtime.onMessage.addListener((msg) => {
       return true;
     }
   }
+
+  if (type === 'call') {
+    if (result === 'progress') {
+      chrome.runtime.sendMessage({ type: 'call', result: 'progress' });
+      return true;
+    }
+  }
   return true;
 });

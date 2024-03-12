@@ -1,17 +1,12 @@
 import { useState } from 'react';
 import { answer, call, endCall } from '../../api/phone';
-import { messageTypes, responseType, statusCallTypes } from '../../constants/constants';
+import { statusCallTypes } from '../../constants/constants';
 import AnswerButtons from './AnswerButtons/AnswerButtons';
 import CallButton from './CallButton/CallButton';
 import './CallPage.css';
-import Timer from '../Timer/Timer';
 
-function CallPage({ isConnect }) {
+function CallPage({ isConnect, setError, statusCall, error, incomingPhone }) {
   const [sipURI, setURI] = useState('');
-  const [error, setError] = useState(false);
-  const [incomingPhone, setIncomingPhone] = useState('');
-  const [statusCall, setStatusCall] = useState(statusCallTypes.default);
-  const [running, setRunning] = useState(false);
 
   const callHandler = (e) => {
     e.preventDefault();
@@ -43,50 +38,6 @@ function CallPage({ isConnect }) {
     endCall();
   };
 
-  chrome.runtime.onMessage.addListener((msg) => {
-    const { type, phone, result } = msg;
-    if (type === messageTypes.answer) {
-      if (phone) {
-        setIncomingPhone(phone);
-        setStatusCall(statusCallTypes.incomingCall);
-      }
-      if (result === responseType.ok) {
-        setStatusCall(statusCallTypes.connectingAnswer);
-      }
-      if (result === responseType.failed) {
-        setError('rejected');
-        setIncomingPhone('');
-        setStatusCall(statusCallTypes.default);
-        setTimeout(() => setError(''), 2000);
-      }
-    }
-
-    if (type === messageTypes.call) {
-      if (result === responseType.ok) {
-        setStatusCall(statusCallTypes.connectingCall);
-      }
-      if (result === responseType.failed) {
-        setError('rejected');
-      }
-      if (result === responseType.progress) {
-        setStatusCall(statusCallTypes.progress);
-      }
-    }
-    if (type === messageTypes.end) {
-      setStatusCall('default');
-      setIncomingPhone('');
-    }
-
-    if (type === messageTypes.timer) {
-      if (result === responseType.stop) {
-        setRunning(false);
-      }
-      if (result === responseType.start) {
-        setRunning(true);
-      }
-    }
-  });
-
   return (
     <div className="callPage">
       <form onSubmit={callHandler} className="form">
@@ -110,6 +61,9 @@ function CallPage({ isConnect }) {
             Call from: <span className="phone">{incomingPhone}</span>
           </p>
         )}
+        {statusCall === statusCallTypes.progress && (
+          <p className="phoneBlock">calling...</p>
+        )}
         <AnswerButtons
           answerHandler={answerHandler}
           rejectHandler={rejectHandler}
@@ -119,8 +73,8 @@ function CallPage({ isConnect }) {
           callHandler={callHandler}
           statusCall={statusCall}
           isConnect={isConnect}
+          sipURI={sipURI}
         />
-        {running && <Timer running={running} />}
       </form>
     </div>
   );

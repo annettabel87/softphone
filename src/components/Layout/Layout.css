@@ -20,6 +20,12 @@
   gap: 15px;
 }
 
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .title {
   text-align: center;
 }
