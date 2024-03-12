@@ -1,7 +1,7 @@
 chrome.runtime.onMessage.addListener((msg) => {
-  const { type, keyName, value, result, phone, newCall } = msg;
+  const { type, key, value, result, phone, newCall } = msg;
   if (type === 'save') {
-    chrome.storage.local.set({ [keyName]: JSON.stringify(value) });
+    chrome.storage.local.set({ [key]: JSON.stringify(value) });
     return true;
   }
 

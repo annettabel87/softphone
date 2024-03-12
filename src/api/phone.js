@@ -37,7 +37,7 @@ export function registration(login, password, server) {
     chrome.runtime.sendMessage({
       type: messageTypes.save,
       key: 'register',
-      value: { server, password, login, register: true },
+      value: { server, password, login},
     });
   });
 
