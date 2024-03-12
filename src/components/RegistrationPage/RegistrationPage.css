@@ -92,3 +92,12 @@ input:-webkit-autofill:active {
     color: red;
     font-size: 16px;
 }
+
+.showBtn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    background-color: inherit;
+    border: none;
+    cursor: pointer;
+}
