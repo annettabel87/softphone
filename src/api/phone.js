@@ -63,8 +63,6 @@ export function registration(login, password, server) {
   });
 
   coolPhone.on('newRTCSession', (data) => {
-    console.log(data);
-
     session = data.session;
 
     session.on('connecting', () => {
@@ -133,12 +131,30 @@ export function registration(login, password, server) {
       });
     }
 
-    session.on('failed', () => {
-      incomingSound.pause();
-      chrome.runtime.sendMessage({
-        type: messageTypes.answer,
-        result: responseType.failed,
-      });
+    session.on('failed', (e) => {
+      try {
+        if (e.cause === 'Canceled') {
+          const newCall = {
+            start: new Date(),
+            end: new Date(),
+            phone: e.message.from.uri.user,
+            direction: 'canceled',
+            callDuration: (callEndTime - callStartTime) / 1000,
+          };
+
+          chrome.runtime.sendMessage({
+            type: messageTypes.updateHistory,
+            newCall,
+          });
+        }
+        incomingSound.pause();
+        chrome.runtime.sendMessage({
+          type: messageTypes.answer,
+          result: responseType.failed,
+        });
+      } catch (error) {
+        console.log(error);
+      }
     });
 
     session.on('ended', () => {

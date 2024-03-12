@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { call } from '../../../api/phone';
 import phoneIcon from '../../../../public/icons/phone.svg';
 import outgoingIcon from '../../../../public/icons/outgoing.svg';
+import missedIcon from '../../../../public/icons/missed.svg';
 import incomingIcon from '../../../../public/icons/incoming.svg';
 import getFormattedDate from '../../../utils/getFormattedTimeDate';
 import { ROUTE } from '../../../constants/constants';
@@ -21,9 +22,13 @@ function HistoryCard({ data, isConnect }) {
       <div className="info">
         <div className="raw">
           <p>
-            {direction === 'outgoing' ? (
+            {direction === 'outgoing' && (
               <img src={outgoingIcon} alt="arrow" width={22} height={22} />
-            ) : (
+            )}
+            {direction === 'canceled' && (
+              <img src={missedIcon} alt="arrow" width={17} height={17} />
+            )}
+            {direction === 'incoming' && (
               <img src={incomingIcon} alt="arrow" width={22} height={22} />
             )}
           </p>

@@ -39,13 +39,13 @@ chrome.runtime.onMessage.addListener((msg) => {
       return true;
     }
 
-    if (phone) {
-      chrome.runtime.sendMessage({ type: 'answer', phone });
+    if (result === 'failed') {
+      chrome.runtime.sendMessage({ type: 'answer', result: 'failed' });
       return true;
     }
 
-    if (result === 'failed') {
-      chrome.runtime.sendMessage({ type: 'answer', result: 'failed' });
+    if (phone) {
+      chrome.runtime.sendMessage({ type: 'answer', phone });
       return true;
     }
   }
