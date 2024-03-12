@@ -1,0 +1,18 @@
+ .historyPage {
+     display: flex;
+     flex-direction: column;
+     gap: 15px;
+     align-items: center;
+     padding-bottom: 20px;
+ }
+ 
+ .textHistory {
+    font-size: 16px;
+ }
+
+ .cardsField {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 90%;
+ }

@@ -6,6 +6,7 @@ export const messageTypes = {
   connect: 'connect',
   end: 'end',
   timer: 'timer',
+  updateHistory: 'updateHistory',
 };
 
 export const responseType = {

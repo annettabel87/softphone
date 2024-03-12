@@ -1,8 +1,24 @@
 chrome.runtime.onMessage.addListener((msg) => {
-  const { type, keyName, value, result, phone } = msg;
+  const { type, keyName, value, result, phone, newCall } = msg;
   if (type === 'save') {
     chrome.storage.local.set({ [keyName]: JSON.stringify(value) });
     return true;
+  }
+
+  if (type === 'updateHistory') {
+    if (newCall) {
+      chrome.storage.local.get(['history']).then(({ history }) => {
+        let arrayHistory;
+        if (history) {
+          arrayHistory = JSON.parse(history);
+        } else {
+          arrayHistory = [];
+        }
+        const newHistory = [newCall, ...arrayHistory];
+        chrome.storage.local.set({ history: JSON.stringify(newHistory) });
+      });
+      return true;
+    }
   }
 
   if (type === 'register') {
@@ -62,4 +78,5 @@ chrome.runtime.onMessage.addListener((msg) => {
       return true;
     }
   }
+  return true;
 });

@@ -25,7 +25,7 @@ function App() {
             }
           />
           <Route path={ROUTE.CALL} element={<CallPage isConnect={isConnect} />} />
-          <Route path={ROUTE.HISTORY} element={<HistoryPage />} />
+          <Route path={ROUTE.HISTORY} element={<HistoryPage isConnect={isConnect} />} />
         </Route>
       </Routes>
     </div>

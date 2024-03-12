@@ -1,0 +1,48 @@
+.historyCard {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.raw {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.historyBtn {
+    padding: 0px;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: .5s;
+    letter-spacing: 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: darkcyan;
+    border: 1px solid darkcyan;
+}
+
+.historyBtn:hover {
+    background-color: rgb(2, 168, 168);
+}
+
+.historyBtn:disabled,
+.historyBtn[disabled] {
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+    cursor: default;
+}
+
+.smallText {
+    font-size: 12px;
+}

@@ -5,6 +5,7 @@ let coolPhone;
 let session;
 let callStartTime;
 let callEndTime;
+let phone;
 const sound = new window.Audio();
 sound.autoplay = true;
 sound.loop = true;
@@ -74,7 +75,7 @@ export function registration(login, password, server) {
     });
 
     session.on('progress', () => {
-      const phone = session.remote_identity.uri.user;
+      phone = session.remote_identity.uri.user;
       const type = data.originator === 'remote' ? 'incomingCall' : 'outgoingCall';
 
       if (type === 'incomingCall') {
@@ -97,7 +98,7 @@ export function registration(login, password, server) {
     });
 
     session.on('confirmed', () => {
-      callStartTime = new Date();
+      callStartTime = session.start_time;
       chrome.runtime.sendMessage({
         type: messageTypes.answer,
         result: responseType.ok,
@@ -142,7 +143,20 @@ export function registration(login, password, server) {
 
     session.on('ended', () => {
       incomingSound.pause();
-      callEndTime = new Date();
+      callEndTime = session.end_time;
+      const newCall = {
+        start: callStartTime,
+        end: callEndTime,
+        phone,
+        direction: session.direction,
+        callDuration: (callEndTime - callStartTime) / 1000,
+      };
+
+      chrome.runtime.sendMessage({
+        type: messageTypes.updateHistory,
+        newCall,
+      });
+
       chrome.runtime.sendMessage({
         type: messageTypes.end,
       });
@@ -170,8 +184,8 @@ export function endCall() {
   });
 }
 
-export function call(phone) {
-  coolPhone.call(phone, {
+export function call(uri) {
+  coolPhone.call(uri, {
     pcConfig: {
       hackStripTcp: true,
       rtcpMuxPolicy: 'negotiate',
