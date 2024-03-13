@@ -1,8 +1,15 @@
-# React + Vite
+# Расширение для Chrome: софтфон. Стажировка в coMagic
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### React
+### JSsip
 
-Currently, two official plugins are available:
+### Для установки:
+1. Склонировать или скачать репозиторий.
+2. Установить зависимости:  npm install .
+3. Собрать проект: npm run build.
+4. Загрузить разрешение в режим разработчика (папка dist).
+5. Нажать правой кнопкой мыши на иконку расширения и выбрать пункт "посмотреть разрешения для сайта".
+6. Разрешить доступ к микрофону браузера.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+
