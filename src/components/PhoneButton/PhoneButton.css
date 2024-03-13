@@ -1,0 +1,36 @@
+.reject,
+.call {
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 16px;
+  text-transform: uppercase;
+  transition: .5s;
+  letter-spacing: 4px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.reject {
+  background-color: brown;
+  border: 1px solid brown;
+}
+
+.reject:hover {
+  background-color: #e55050;
+}
+
+.call {
+  background-color: darkcyan;
+  border: 1px solid darkcyan;
+}
+
+.call:disabled,
+.call[disabled]{
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
+.call:hover {
+  background-color: rgb(9, 173, 173);
+}

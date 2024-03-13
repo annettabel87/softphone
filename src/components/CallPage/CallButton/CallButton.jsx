@@ -1,25 +1,16 @@
 import { statusCallTypes } from '../../../constants/constants';
-import phoneIcon from '../../../../public/icons/phone.svg';
+import PhoneButton from '../../PhoneButton/PhoneButton';
 import './CallButton.css';
 
 function CallButton({ callHandler, statusCall, isConnect }) {
   return (
     <div className="callButtonBlock">
       {statusCall === statusCallTypes.default && (
-        <button
-          type="submit"
-          className="callBtn"
-          onClick={callHandler}
-          disabled={!isConnect}
-        >
-          <img src={phoneIcon} alt="phone" width={30} height={30} />
-        </button>
+        <PhoneButton onClickHandler={callHandler} disabled={!isConnect} type="call" />
       )}
       {(statusCall === statusCallTypes.progress ||
         statusCall === statusCallTypes.connectingCall) && (
-        <button type="button" className="rejectBtn" onClick={callHandler}>
-          <img src={phoneIcon} alt="phone" width={30} height={30} />
-        </button>
+        <PhoneButton onClickHandler={callHandler} disabled={!isConnect} type="reject" />
       )}
     </div>
   );

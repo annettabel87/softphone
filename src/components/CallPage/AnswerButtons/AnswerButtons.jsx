@@ -1,4 +1,5 @@
 import { statusCallTypes } from '../../../constants/constants';
+import PhoneButton from '../../PhoneButton/PhoneButton';
 import './AnswerButtons.css';
 
 function AnswerButtons({ answerHandler, rejectHandler, statusCall }) {
@@ -6,18 +7,12 @@ function AnswerButtons({ answerHandler, rejectHandler, statusCall }) {
     <div className="answerBtnBlock">
       {statusCall === statusCallTypes.incomingCall && (
         <>
-          <button type="button" className="answerButton" onClick={answerHandler}>
-            Answer
-          </button>
-          <button type="button" className="rejectButton" onClick={rejectHandler}>
-            Reject
-          </button>
+          <PhoneButton onClickHandler={answerHandler} disabled={false} type="call" />
+          <PhoneButton onClickHandler={rejectHandler} disabled={false} type="reject" />
         </>
       )}
       {statusCall === statusCallTypes.connectingAnswer && (
-        <button type="button" className="rejectButton" onClick={rejectHandler}>
-          Reject
-        </button>
+        <PhoneButton onClickHandler={rejectHandler} disabled={false} type="reject" />
       )}
     </div>
   );

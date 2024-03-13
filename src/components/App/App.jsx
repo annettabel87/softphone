@@ -10,7 +10,6 @@ import {
   statusCallTypes,
   responseType,
 } from '../../constants/constants';
-import './App.css';
 
 function App() {
   const [isRegister, setIsRegister] = useState(false);
